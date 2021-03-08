@@ -5,14 +5,16 @@ int shv = 0;
 void function1() {
 while (1)
 {
-    shv+=2;
+    shv++;
+    shv++;
 }
 
 }
 void function2() {
     while (1)
     {
-        shv-=2;
+        shv--;
+        shv--;
     }
     
 }
