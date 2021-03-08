@@ -18,7 +18,6 @@ for (int i = 0; i < 10; i++)
 {
     if (pthread_equal(id,tid[i]))
     {
-        printf("Hilo número %d : \n",i);
         int inicio=10000*i;
         for (int j = inicio; j <= (inicio+10000); j++)
         {
@@ -43,6 +42,7 @@ int err;
 
 while(i < 10){
 
+printf("Hilo número %d : \n",i);
 err = pthread_create(&(tid[i]), NULL, &doSomeThing, NULL);
 
  if (err != 0)
