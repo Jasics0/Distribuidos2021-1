@@ -3,7 +3,8 @@
 #include <stdlib.h>
 struct data
 {
-    int a,b;
+    int a;
+    int b[a];
 };
 void function(void *data)
 {

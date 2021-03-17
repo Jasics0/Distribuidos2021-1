@@ -1,26 +1,76 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int main(){
-    FILE * flujo = fopen("sample.txt","rb");
-    if(flujo==NULL){
+struct data
+{
+    int a;
+    int b;
+};
+
+FILE *openFile()
+{
+    FILE *flujo = fopen("sample.txt", "rb");
+    if (flujo == NULL)
+    {
         perror("Hubo un error al abrir el archivo.");
-        return 1;
     }
+    return flujo;
+}
 
-    char c;
-    int num_datos=0;
-    long dato=0;
-
-    while(feof(flujo)==0){
-        c=fgetc(flujo);
-        if(c=='\n'){
-            num_datos++;
-        }
-        fscanf(flujo,"%ld",&dato);
-        printf("%ld\n",dato);
-    }
-    num_datos++;
+void closeFile(FILE *flujo)
+{
     fclose(flujo);
-    printf("\n\nTodo se ejecutó nice, y hubo %d datos\n",num_datos);
+}
+
+double sumarDatos(int a, int b, FILE *flujo)
+{
+    int i = 0;
+    long dato = 0;
+    double suma = 0;
+
+    while (feof(flujo) == 0)
+    {
+        i++;
+        fscanf(flujo, "%ld", &dato);
+        if (i > a && i <= b)
+        {
+            suma = suma + dato;
+        }
+        if (i == b)
+        {
+            closeFile(flujo);
+            return suma;
+        }
+    }
+}
+
+long contarDatos(FILE *flujo)
+{
+    long i = 0;
+    long dato = 0;
+    while (feof(flujo) == 0)
+    {
+        i++;
+        fscanf(flujo, "%ld", &dato);
+    }
+    closeFile(flujo);
+    return i;
+}
+
+int main(char **argv)
+{
+    long num_datos = contarDatos(openFile());
+    int num_hilos = 2;
+    int n = num_datos / num_hilos;
+    struct data *posiciones = (struct data *)calloc(n, sizeof(struct data));
+    double suma = 0;
+    for (int i = 0; i < num_hilos; i++)
+    {
+        posiciones[i].a = (i * n);
+        posiciones[i].b = ((i + 1) * n);
+        suma += sumarDatos(posiciones[i].a, posiciones[i].b, openFile());
+    }
+    printf("La suma es: %lf\n", suma);
+    double promedio=suma/num_datos;
+    printf("El promedio es: %lf\n",promedio);
 }
