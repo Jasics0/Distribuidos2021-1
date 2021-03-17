@@ -60,7 +60,7 @@ long contarDatos(FILE *flujo)
 int main(char **argv)
 {
     long num_datos = contarDatos(openFile());
-    int num_hilos = 2;
+    int num_hilos =4 ;
     int n = num_datos / num_hilos;
     struct data *posiciones = (struct data *)calloc(n, sizeof(struct data));
     double suma = 0;
