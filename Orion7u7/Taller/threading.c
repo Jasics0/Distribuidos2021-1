@@ -5,6 +5,7 @@ struct data
 {
     int a,b;
 };
+
 void function(void *data)
 {
     struct data *t_data=(struct data *)data;

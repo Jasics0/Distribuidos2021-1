@@ -10,7 +10,7 @@ int main(int argc, char **argv)
 
     if (p1 == 0 && p2 == 0)
     {
-        printf("xd");
+        
         p3 = fork();
         if (p3 != 0)
             p4 = fork();
@@ -19,6 +19,7 @@ int main(int argc, char **argv)
     }
     else
     {
+        
         p4 = fork();
         if (p4 == 0 && p1 != 0)
                 fork();
