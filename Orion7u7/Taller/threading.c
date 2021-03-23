@@ -13,7 +13,7 @@ void function(void *data)
         printf("%d\n",t_data->b);
         //(*t_data).b
 }
-pthread_t threads[5];
+pthread_t threads[100];
 // ./program aaaa     bbb     ccc
 //   argv[0] argv[1]  argv[2] argv[3]   
 int main(int argc,char **argv)
