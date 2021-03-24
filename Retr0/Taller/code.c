@@ -4,8 +4,8 @@
 
 struct data
 {
-    int a;
-    int b;
+    long a;
+    long b;
 };
 
 pthread_t threads[100];
@@ -31,9 +31,9 @@ void sumarDatos(void *data)
 {
     struct data *t_data = (struct data *)data;
     FILE *flujo = openFile();
-    int a = (*t_data).a;
-    int b = (*t_data).b;
-    int i = 0;
+    long a = (*t_data).a;
+    long b = (*t_data).b;
+    long i = 0;
     long dato = 0;
     double suma = 0;
 
@@ -72,8 +72,8 @@ int main(int argc, char **argv)
     nombre = argv[2];
     long num_datos = contarDatos(openFile());
     int num_hilos = atoi(argv[1]);
-    int n = num_datos / num_hilos;
-    struct data *posiciones = (struct data *)calloc(n, sizeof(struct data));
+    long n = num_datos / num_hilos;
+    struct data *posiciones = (struct data *)calloc(num_hilos, sizeof(struct data));
     printf("Número de hilos usados: %d\n", num_hilos);
     for (int i = 0; i < num_hilos; i++)
     {
@@ -82,7 +82,7 @@ int main(int argc, char **argv)
         if (i == num_hilos - 1 && num_datos % num_hilos != 0)
         {
             int excedente = num_datos - (n * num_hilos);
-            posiciones[num_hilos - 1].b = posiciones[num_hilos - 1].b + excedente;
+            posiciones[i].b = posiciones[i].b + excedente;
         }
         pthread_create(&threads[i], NULL, (void *)&sumarDatos, (void *)&posiciones[i]);
         pthread_join(threads[i], NULL);
