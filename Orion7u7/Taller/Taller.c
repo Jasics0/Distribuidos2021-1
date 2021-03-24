@@ -15,6 +15,7 @@ FILE *archivo(){
     return fp;
     
 }
+
 pthread_t threads [100];
 
 int main(int argc,char **argv)

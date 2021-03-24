@@ -4,12 +4,14 @@
 struct data
 {
     int a, b;
-    char fd;
 };
 
-FILE *archivo(char fd)
+float sumaTotal=0;
+
+FILE *archivo()
 {
-    FILE *fp = fopen(fd, "rt");
+    
+    FILE *fp = fopen("sample.txt", "rt");
     if (fp == NULL)
     {
         printf("No se pudo leer el archivo");
@@ -24,35 +26,45 @@ void function(void *data)
     long i;
     int a = (*t_data).a;
     int b = (*t_data).b;
-    int suma;
     int valor = 0;
 
     while (!feof(fp))
     {
+        i++;
         fscanf(fp, "%d", &valor);
-        suma = suma + valor;
+        if (i > a && i <= b)
+        {
+            sumaTotal = sumaTotal + valor;
+        }
+        if (i == b)
+        {
+            fclose(fp);
+            break;
+        }
     }
-    printf("Suma %d", suma);
-    fclose(fp);
+    
 }
+
 pthread_t threads[100];
 // ./program aaaa     bbb     ccc
 //   argv[0] argv[1]  argv[2] argv[3]
 int main(int argc, char **argv)
 {
-    struct data array[5];
+    struct data array[100];
     int i;
     int num_hilos = atoi(argv[1]);
-    char text = scanf("%s", &argv[2]);
-    int num_datos = atoi(argv[3]);
-
+    int num_datos = atoi(argv[2]);
+    int var = num_datos/num_hilos;
     for (i = 0; i < num_hilos; i++)
     {
-        array[i].b = i + 1;
+        array[i].a =i*var ;
+        array[i].b=(i+1)*var;
         pthread_create(&threads[i], NULL, (void *)&function, (void *)&array[i]);
     }
     for (i = 0; i < num_hilos; i++)
     {
         pthread_join(threads[i], NULL);
     }
+    printf("LA suma es: %f\n",sumaTotal);
+    printf("El promedio es: %f\n",sumaTotal/num_datos);
 }
