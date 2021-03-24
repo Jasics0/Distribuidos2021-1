@@ -8,11 +8,13 @@ struct data
     int b;
 };
 
-pthread_t *threads;
+pthread_t threads[100];
 double suma_total = 0;
+char *nombre;
+
 FILE *openFile()
 {
-    FILE *flujo = fopen("sample.txt", "rb");
+    FILE *flujo = fopen(nombre, "rb");
     if (flujo == NULL)
     {
         perror("Hubo un error al abrir el archivo.");
@@ -65,27 +67,27 @@ long contarDatos(FILE *flujo)
     return i;
 }
 
-// ./program aaaa     bbb     ccc
-//   argv[0] argv[1]  argv[2] argv[3]
 int main(int argc, char **argv)
 {
+    nombre = argv[2];
     long num_datos = contarDatos(openFile());
     int num_hilos = atoi(argv[1]);
     int n = num_datos / num_hilos;
     struct data *posiciones = (struct data *)calloc(n, sizeof(struct data));
-    threads = (pthread_t *)calloc(num_hilos, sizeof(pthread_t));
     printf("Número de hilos usados: %d\n", num_hilos);
     for (int i = 0; i < num_hilos; i++)
     {
         posiciones[i].a = (i * n);
         posiciones[i].b = ((i + 1) * n);
+        if (i == num_hilos - 1 && num_datos % num_hilos != 0)
+        {
+            int excedente = num_datos - (n * num_hilos);
+            posiciones[num_hilos - 1].b = posiciones[num_hilos - 1].b + excedente;
+        }
         pthread_create(&threads[i], NULL, (void *)&sumarDatos, (void *)&posiciones[i]);
-    }
-
-    for (int i = 0; i < num_hilos; i++)
-    {
         pthread_join(threads[i], NULL);
     }
+
     printf("La suma es: %lf\n", suma_total);
     double promedio = suma_total / num_datos;
     printf("El promedio es: %lf\n", promedio);
