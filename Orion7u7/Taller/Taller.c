@@ -9,7 +9,7 @@ struct data
 
 FILE *archivo(){
     FILE *fp=fopen("sample.txt","r");
-    if(fp=NULL){
+    if(fp == NULL){
         printf("No se pudo leer el archivo");
     }
     return fp;
