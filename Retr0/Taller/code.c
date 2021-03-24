@@ -72,8 +72,8 @@ int main(int argc, char **argv)
     nombre = argv[2];
     long num_datos = contarDatos(openFile());
     int num_hilos = atoi(argv[1]);
-    int n = num_datos / num_hilos;
-    struct data *posiciones = (struct data *)calloc(n, sizeof(struct data));
+    long n = num_datos / num_hilos;
+    struct data *posiciones = (struct data *)calloc(num_hilos, sizeof(struct data));
     printf("Número de hilos usados: %d\n", num_hilos);
     for (int i = 0; i < num_hilos; i++)
     {
