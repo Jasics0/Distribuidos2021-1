@@ -3,53 +3,56 @@
 #include <stdlib.h>
 struct data
 {
-    int a,b;
+    int a, b;
+    char fd;
 };
 
-FILE *archivo(){
-    FILE *fp=fopen("sample.txt","rt");
-    if(fp == NULL){
+FILE *archivo(char fd)
+{
+    FILE *fp = fopen(fd, "rt");
+    if (fp == NULL)
+    {
         printf("No se pudo leer el archivo");
     }
     return fp;
-    
 }
 
 void function(void *data)
 {
-    struct data *t_data=(struct data *)data;
+    struct data *t_data = (struct data *)data;
+    FILE *fp = archivo();
     long i;
-    for (i=0;i<1e5;i++)
-        printf("%d\n",t_data->b);
-        //(*t_data).b
+    int a = (*t_data).a;
+    int b = (*t_data).b;
+    int suma;
+    int valor = 0;
+
+    while (!feof(fp))
+    {
+        fscanf(fp, "%d", &valor);
+        suma = suma + valor;
+    }
+    printf("Suma %d", suma);
+    fclose(fp);
 }
 pthread_t threads[100];
 // ./program aaaa     bbb     ccc
-//   argv[0] argv[1]  argv[2] argv[3]   
-int main(int argc,char **argv)
+//   argv[0] argv[1]  argv[2] argv[3]
+int main(int argc, char **argv)
 {
-   /*struct data array[5];
-   int i;
-   int num=0;
-   num=atoi(argv[1]);
-   for (i=0;i<num;i++)
-   {
-       array[i].b=i+1;
-       pthread_create(&threads[i],NULL,(void *)&function,(void *)&array[i]); 
-   }
-   for (i=0;i<num;i++)
-   {
-     pthread_join(threads[i],NULL); 
-   }*/
-   int valor;
-   while (feof(archivo())==0){
-       fscanf(archivo(),"%d",&valor);
-       printf("extraido: %d \n", valor);
-   }
-   fclose(archivo());
-   
+    struct data array[5];
+    int i;
+    int num_hilos = atoi(argv[1]);
+    char text = scanf("%s", &argv[2]);
+    int num_datos = atoi(argv[3]);
+
+    for (i = 0; i < num_hilos; i++)
+    {
+        array[i].b = i + 1;
+        pthread_create(&threads[i], NULL, (void *)&function, (void *)&array[i]);
+    }
+    for (i = 0; i < num_hilos; i++)
+    {
+        pthread_join(threads[i], NULL);
+    }
 }
-
-
-
-
