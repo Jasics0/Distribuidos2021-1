@@ -7,11 +7,13 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 
-void dg_cli(FILE *fp, int sockfd, struct sockaddr *pservaddr, long servlen) {
+void dg_cli(FILE *fp, int sockfd, struct sockaddr *pservaddr, long servlen)
+{
     int n;
     char sendline[MAXLINE], recvline[MAXLINE + 1];
 
-    while (fgets(sendline, MAXLINE, fp) != NULL) {
+    while (fgets(sendline, MAXLINE, fp) != NULL)
+    {
         sendto(sockfd, sendline, strlen(sendline), 0, pservaddr, servlen);
         n = recvfrom(sockfd, recvline, MAXLINE, 0, NULL, NULL);
         recvline[n] = 0; /* null */
@@ -19,11 +21,13 @@ void dg_cli(FILE *fp, int sockfd, struct sockaddr *pservaddr, long servlen) {
     }
 }
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
     int sockfd;
     struct sockaddr_in serveraddr;
 
-    if (argc != 2) {
+    if (argc != 2)
+    {
         fprintf(stdout, "Uso: cliente <direccion IP>\n");
         exit(-1);
     }
