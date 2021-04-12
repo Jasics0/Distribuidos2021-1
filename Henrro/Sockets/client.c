@@ -28,12 +28,12 @@ int main(int argc, char **argv) {
         exit(-1);
     }
 
-    bzero(&serveradder, sizeof(serveraddr));
+    bzero(&serveraddr, sizeof(serveraddr));
     serveraddr.sin_family = PF_INET;
     serveraddr.sin_port = htons(SERV_PORT);
     serveraddr.sin_addr.s_addr = inet_addr(argv[1]);
 
-    sockfd = socket(PF_INTET, SOCK_DGRAM, 0);
+    sockfd = socket(PF_INET, SOCK_DGRAM, 0);
 
     dg_cli(stdin, sockfd, (struct sockaddr *)&serveraddr, sizeof(serveraddr));
     exit(0);

@@ -6,29 +6,32 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 
-void dg_echo(int sockfd, struct sockaddr* pcliaddr, long clilen) {
+void dg_echo(int sockfd, struct sockaddr *pcliaddr, long clilen)
+{
     int n;
     socklen_t len;
     char msg[MAXLINE];
 
-    for (;;) {
+    for (;;)
+    {
         len = clilen;
         n = recvfrom(sockfd, msg, MAXLINE, 0, pcliaddr, &len);
         sendto(sockfd, msg, n, 0, pcliaddr, len);
     }
+}
 
-    int main(int argc, char** argv) {
-        int sockfd;
-        struct sockaddr_in serveraddr, cliaddr;
-        sockfd = socket(PF_INET, SCK_DGRAM, 0);
+int main(int argc, char **argv)
+{
+    int sockfd;
+    struct sockaddr_in serveraddr, cliaddr;
+    sockfd = socket(PF_INET, SOCK_DGRAM, 0);
 
-        bzero(&serveraddr, sizeof(serveraddr));
-        serveraddr.sin_family = PF_INET;
-        serveraddr.sin_addr.s_addr = htonl(INADDR_ANY);
-        serveraddr.sin_portj - htons(SERV_PORT);
+    bzero(&serveraddr, sizeof(serveraddr));
+    serveraddr.sin_family = PF_INET;
+    serveraddr.sin_addr.s_addr = htonl(INADDR_ANY);
+    serveraddr.sin_port = htons(SERV_PORT);
 
-        bind(sockfd, (struct sockaddr*)&serveraddr, sizeof(serveraddr));
+    bind(sockfd, (struct sockaddr *)&serveraddr, sizeof(serveraddr));
 
-        dg_echo(sockfd, (struct sockaddr*)&cliaddr, sizeof(cliaddr));
-    }
+    dg_echo(sockfd, (struct sockaddr *)&cliaddr, sizeof(cliaddr));
 }
