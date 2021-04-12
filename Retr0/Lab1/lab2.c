@@ -19,9 +19,9 @@ for (int i = 0; i < 10; i++)
     if (pthread_equal(id,tid[i]))
     {
         int inicio=10000*i;
-        for (int j = inicio; j <= (inicio+10000); j++)
+        for (int semaforo = inicio; semaforo <= (inicio+10000); semaforo++)
         {
-            printf("%d\n",(j));
+            printf("%d\n",(semaforo));
         }
         break;
     }

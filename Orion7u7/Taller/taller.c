@@ -12,7 +12,7 @@ char *arch;
 FILE *archivo()
 {
     
-    FILE *fp = fopen(arch, "rt");
+    FILE *fp = fopen(arch, "r");
     if (fp == NULL)
     {
         printf("No se pudo leer el archivo");
@@ -28,17 +28,18 @@ void function(void *data)
     int a = (*t_data).a;
     int b = (*t_data).b;
     long valor = 0;
-
+    int sumami;
     while (!feof(fp))
     {
         i++;
         fscanf(fp, "%ld", &valor);
         if (i > a && i <= b)
         {
-            sumaTotal = sumaTotal + valor;
+            sumami = sumami + valor;
         }
         if (i == b)
         {
+            sumaTotal=sumaTotal+sumami;
             fclose(fp);
             break;
         }
