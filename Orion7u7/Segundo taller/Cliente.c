@@ -21,4 +21,46 @@ int main(int argc, char *argv[])
         fprintf(stderr, "Uso: %s <host> <port>\n", argv[0]);
         exit(1);
     }
+
+    if ((sock = socket(PF_INET,SOCK_STREAM,0))==-1)
+    {
+        perror("Imposible creación del socket");
+        exit(2);
+    }
+
+    if (( hp = gethostbyname(argv[1]))==NULL)
+    {
+        perror("Error: NOmbre de la maquina desconocido");
+        exit(3);
+    }
+
+    adr.sin_family = PF_INET;
+    adr.sin_addr.s_addr =htonl(INADDR_ANY);
+    adr.sin_port = htons(atoi(argv[2]));
+    bcopy(hp->h_addr,&adr.sin_addr,hp->h_length);
+
+    if(connect(sock,&adr,sizeof(adr))==-1)
+    {
+        perror("connect");
+        exir(4);
+    }
+
+    str_echo(stdin,sock);
+}
+
+void str_echo  (FILE *fp, int sock)
+{
+    char sendline [MAXLINE], recvline[MAXLINE];
+    int n;
+
+    while (fgets(sendline, MAXLINE,fp)!=NULL)
+    {
+        write(sock,sendline,strlen(sendline));
+        if(read(sock,recvline,MAXLINE)==0){
+            fprintf(stderr,"SErvidor terminando prematuramente\n");
+            exit(5);
+        }
+        fputs(recvline, stdout);
+    }
+    
 }
