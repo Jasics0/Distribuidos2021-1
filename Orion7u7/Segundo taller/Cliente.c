@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
     if(connect(sock,&adr,sizeof(adr))==-1)
     {
         perror("connect");
-        exir(4);
+        exit(4);
     }
 
     str_echo(stdin,sock);
