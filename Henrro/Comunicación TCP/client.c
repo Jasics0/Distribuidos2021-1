@@ -2,7 +2,7 @@
 #include <netinet/in.h>
 #include <stdio.h>
 #include <sys/socket.h>
-#include <sys/types>
+#include <sys/types.h>
 
 #define SIZE 256
 #define MAXLINE 4096
