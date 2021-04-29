@@ -1,11 +1,12 @@
-#include <stdio.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
 #include <netdb.h>
+#include <netinet/in.h>
+#include <stdio.h>
+#include <sys/socket.h>
+#include <sys/types.h>
 
 #define SIZE 256
 #define MAXLINE 4096
+
 
 void str_echo(FILE *fp, int sock);
 
