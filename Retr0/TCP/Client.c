@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <sys/socket.h>
 #include <sys/types.h>
+#include <string.h>
 
 #define SIZE 256
 #define MAXLINE 4096
@@ -31,7 +32,7 @@ int main(int argc, char *argv[])
 
     if (( hp = gethostbyname(argv[1]))==NULL)
     {
-        perror("Error: NOmbre de la maquina desconocido");
+        perror("Error: Nombre de la maquina desconocido");
         exit(3);
     }
 
@@ -56,12 +57,25 @@ void str_echo  (FILE *fp, int sock)
 
     while (fgets(sendline, MAXLINE,fp)!=NULL)
     {
+                limpiarCadena(recvline);
         write(sock,sendline,strlen(sendline));
+        limpiarCadena(sendline);
         if(read(sock,recvline,MAXLINE)==0){
-            fprintf(stderr,"SErvidor terminando prematuramente\n");
+            fprintf(stderr,"Servidor terminando prematuramente\n");
             exit(5);
         }
+        
         fputs(recvline, stdout);
+
+        printf("\n");
     }
     
+}
+
+void limpiarCadena(char line[])
+{
+    for (int i = 0; i < strlen(line); i++)
+    {
+        line[i] = NULL;
+    }
 }

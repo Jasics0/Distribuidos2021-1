@@ -90,9 +90,47 @@ int main(int argc, char *argv[]) {
 servicio(int sock) {
     ssize_t n;
     char line[MAXLINE];
+    char aux[MAXLINE];
     for (;;) {
+          limpiarCadena(aux);
         if ((n = read(sock, line, MAXLINE)) <= 0)
             return;
-        write(sock, &line, n);
+        printf(line);
+       invertirCadena2(line,aux);
+             
+        write(sock, &aux, n);
     }
 }
+void invertirCadena(char line[])
+{
+    int size = strlen(line)-1;
+    for (int i = 0; i < strlen(line) / 2; i++)
+    {
+        char aux = line[size-i];
+        line[size - i] = line[i];
+        line[i] = aux;
+    }
+
+}
+
+
+void invertirCadena2(char line[],char aux[]){
+  int size = strlen(line)-1;
+    for (int i = strlen(line); i >= 0 ; i--)
+    {
+        aux[size-i]=line[i];
+    }
+
+}
+
+
+
+
+void limpiarCadena(char line[])
+{
+    for (int i = 0; i < strlen(line); i++)
+    {
+        line[i] = NULL;
+    }
+}
+
