@@ -13,12 +13,17 @@
 #define MAXLINE 4096
 #define TRUE 1
 
-int crearsocket(int *port, int type) {
+char *invertir(char cadena[]);
+char *limpiar(char cadena[]);
+
+int crearsocket(int *port, int type)
+{
     int sockfd;
     struct sockaddr_in adr;
     int longitud;
 
-    if ((sockfd = socket(PF_INET, type, 0)) == -1) {
+    if ((sockfd = socket(PF_INET, type, 0)) == -1)
+    {
         perror("Error: Imposible crear socket");
         exit(2);
     }
@@ -26,13 +31,15 @@ int crearsocket(int *port, int type) {
     adr.sin_port = htons(*port);
     adr.sin_addr.s_addr = htonl(INADDR_ANY);
     adr.sin_family = PF_INET;
-    if (bind(sockfd, (struct sockaddr *)&adr, sizeof(adr)) == -1) {
+    if (bind(sockfd, (struct sockaddr *)&adr, sizeof(adr)) == -1)
+    {
         perror("Error: bind");
         exit(3);
     }
     longitud = sizeof(adr);
 
-    if (getsocketname(sockfd, &adr, &longitud)) {
+    if (getsockname(sockfd, &adr, &longitud))
+    {
         perror("Error: Obtencion del nombre del sock");
         exit(4);
     }
@@ -41,7 +48,8 @@ int crearsocket(int *port, int type) {
     return (sockfd);
 }
 
-void sigchld() {
+void sigchld()
+{
     pid_t pid;
     int stat;
 
@@ -50,19 +58,22 @@ void sigchld() {
     return;
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
     int sock_escucha, sock_servicio;
     struct sockaddr_in adr;
     int lgadr = sizeof(adr);
     int port = PORT;
-    if (argc != 2) {
-        fprintf(stderr, "Uso %s [port]\n".argv[0]);
+    if (argc != 2)
+    {
+        fprintf(stderr, "Uso %s [port]\n", argv[0]);
         exit(1);
     }
 
     port = atoi(argv[1]);
 
-    if ((sock_escucha = crearsocket(&port, SOCK_STREAM)) == -1) {
+    if ((sock_escucha = crearsocket(&port, SOCK_STREAM)) == -1)
+    {
         fprintf(stderr, "Error: No se pudo crear/conectar socket\n");
         exit(2);
     }
@@ -72,12 +83,14 @@ int main(int argc, char *argv[]) {
     listen(sock_escucha, 1024);
 
     fprintf(stdout, "Inicio servidor en el puerto %d\n", port);
-    while (TRUE) {
+    while (TRUE)
+    {
         lgadr = sizeof(adr);
         sock_servicio = accept(sock_escucha, &adr, &lgadr);
         fprintf(stdout, "Servicio aceptado.\n");
 
-        if (fork() == 0) {
+        if (fork() == 0)
+        {
             close(sock_escucha);
 
             servicio(sock_servicio);
@@ -87,12 +100,52 @@ int main(int argc, char *argv[]) {
     }
 }
 
-servicio(int sock) {
+servicio(int sock)
+{
     ssize_t n;
     char line[MAXLINE];
-    for (;;) {
+    char aux[MAXLINE];
+    for (;;)
+    {
         if ((n = read(sock, line, MAXLINE)) <= 0)
             return;
-        write(sock, &line, n);
+        printf(line);
+        write(sock, invertir(line), n);
+        limpiar(line);
+        limpiar(aux);
     }
+}
+
+char reverseString(char line[])
+{
+    int l = strlen(line);
+    char aux;
+    int j = l - 1;
+    for (int i = 0; i < l / 2; i++)
+    {
+        aux = line[i];
+        line[i] = line[j];
+        line[j] = aux;
+    }
+
+    return line;
+}
+
+char *invertir(char line[])
+{
+    int l = strlen(line);
+    char aux;
+    for (int izquierda = 0, derecha = l - 1; izquierda < (l / 2); izquierda++, derecha--)
+    {
+        aux = line[izquierda];
+        line[izquierda] = line[derecha];
+        line[derecha] = aux;
+    }
+    return line;
+}
+
+char *limpiar(char cadena[])
+{
+    cadena = "";
+    return cadena;
 }

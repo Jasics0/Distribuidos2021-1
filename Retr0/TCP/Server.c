@@ -101,6 +101,7 @@ servicio(int sock) {
         write(sock, &aux, n);
     }
 }
+
 void invertirCadena(char line[])
 {
     int size = strlen(line)-1;

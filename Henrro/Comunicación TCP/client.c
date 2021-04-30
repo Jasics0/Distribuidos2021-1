@@ -1,11 +1,16 @@
-#include <netdb.h>
-#include <netinet/in.h>
 #include <stdio.h>
-#include <sys/socket.h>
 #include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netdb.h>
+#include <stdlib.h>
+#include <string.h>
 
 #define SIZE 256
 #define MAXLINE 4096
+
+char *limpiar(char cadena[]);
+char *invertir(char cadena[]);
 
 void str_echo(FILE *fp, int sock);
 
@@ -55,11 +60,21 @@ void str_echo(FILE *fp, int sock)
     while (fgets(sendline, MAXLINE, fp) != NULL)
     {
         write(sock, sendline, strlen(sendline));
+        limpiar(sendline);
         if (read(sock, recvline, MAXLINE) == 0)
         {
             fprintf(stderr, "Servidor termiando prematuramente\n");
             exit(5);
         }
+
         fputs(recvline, stdout);
+        limpiar(recvline);
+        printf("\n");
     }
+}
+
+char *limpiar(char cadena[])
+{
+    cadena = "";
+    return cadena;
 }

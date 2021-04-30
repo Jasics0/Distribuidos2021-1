@@ -57,7 +57,7 @@ void str_echo  (FILE *fp, int sock)
 
     while (fgets(sendline, MAXLINE,fp)!=NULL)
     {
-                limpiarCadena(recvline);
+        limpiarCadena(recvline);
         write(sock,sendline,strlen(sendline));
         limpiarCadena(sendline);
         if(read(sock,recvline,MAXLINE)==0){
