@@ -9,24 +9,26 @@
 
 void str_echo(FILE *fp, int sock);
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
     int sock;
     char com[SIZE];
     struct sockaddr_in adr;
     struct hostent *hp, *gethostbyname();
 
-    if (argc != 3) {
-        fprint(stderr, "Uso: %s <host> <port>\n", argv[0]);
+    if (argc != 3)
+    {
+        fprintf(stderr, "Uso: %s <host> <port>\n", argv[0]);
         exit(1);
     }
 
-    if ((sock = socket(PF_INET, SOCK_STREAM, O) == -1)
+    if ((sock = socket(PF_INET, SOCK_STREAM, 0)) == -1)
     {
-        perror("Imposible creacion del socket");
+        perror("Imposible creación del socket");
         exit(2);
     }
 
-    if ((hp=gethostbyname(argv[1])) == NULL)
+    if ((hp = gethostbyname(argv[1])) == NULL)
     {
         perror("Error: Nombre de la maquina desconocido");
         exit(3);
@@ -37,7 +39,7 @@ int main(int argc, char *argv[]) {
     adr.sin_port = htons(atoi(argv[2]));
     bcopy(hp->h_addr, &adr.sin_addr, hp->h_length);
 
-    if (connect(sock,&adr, sizeof(adr)) == -1)
+    if (connect(sock, &adr, sizeof(adr)) == -1)
     {
         perror("connect");
         exit(4);
@@ -46,12 +48,15 @@ int main(int argc, char *argv[]) {
     str_echo(stdin, sock);
 }
 
-void str_echo(FILE *fp, int sock) {
+void str_echo(FILE *fp, int sock)
+{
     char sendline[MAXLINE], recvline[MAXLINE];
     int n;
-    while (fgets(sendline, MAXLINE, fp) != NULL) {
+    while (fgets(sendline, MAXLINE, fp) != NULL)
+    {
         write(sock, sendline, strlen(sendline));
-        if (read(sock, recvline, MAXLINE) == 0) {
+        if (read(sock, recvline, MAXLINE) == 0)
+        {
             fprintf(stderr, "Servidor termiando prematuramente\n");
             exit(5);
         }
