@@ -114,6 +114,7 @@ servicio(int sock)
         }
         printf(line);
         write(sock, invertir(line), n);
+        limpiar(line);
     }
 }
 
@@ -136,11 +137,11 @@ char *invertir(char line[])
 {
     int l = strlen(line);
     char aux;
-    for (int izquierda = 0, derecha = l - 1; izquierda < (l / 2); izquierda++, derecha--)
+    for (int i = 0, j = l - 1; i < (l / 2); i++, j--)
     {
-        aux = line[izquierda];
-        line[izquierda] = line[derecha];
-        line[derecha] = aux;
+        aux = line[i];
+        line[i] = line[j];
+        line[j] = aux;
     }
     return line;
 }
