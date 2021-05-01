@@ -9,9 +9,6 @@
 #define SIZE 256
 #define MAXLINE 4096
 
-char *limpiar(char cadena[]);
-char *invertir(char cadena[]);
-
 void str_echo(FILE *fp, int sock);
 
 int main(int argc, char *argv[])
@@ -60,7 +57,6 @@ void str_echo(FILE *fp, int sock)
     while (fgets(sendline, MAXLINE, fp) != NULL)
     {
         write(sock, sendline, strlen(sendline));
-        limpiar(sendline);
         if (read(sock, recvline, MAXLINE) == 0)
         {
             fprintf(stderr, "Servidor termiando prematuramente\n");
@@ -68,13 +64,6 @@ void str_echo(FILE *fp, int sock)
         }
 
         fputs(recvline, stdout);
-        limpiar(recvline);
         printf("\n");
     }
-}
-
-char *limpiar(char cadena[])
-{
-    cadena = "";
-    return cadena;
 }

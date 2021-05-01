@@ -8,13 +8,14 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <string.h>
 
 #define PORT 2222
 #define MAXLINE 4096
 #define TRUE 1
 
-char *invertir(char cadena[]);
-char *limpiar(char cadena[]);
+char *invertir(char line[]);
+char *limpiar(char line[]);
 
 int crearsocket(int *port, int type)
 {
@@ -104,15 +105,15 @@ servicio(int sock)
 {
     ssize_t n;
     char line[MAXLINE];
-    char aux[MAXLINE];
+    limpiar(line);
     for (;;)
     {
         if ((n = read(sock, line, MAXLINE)) <= 0)
+        {
             return;
+        }
         printf(line);
         write(sock, invertir(line), n);
-        limpiar(line);
-        limpiar(aux);
     }
 }
 
@@ -144,8 +145,8 @@ char *invertir(char line[])
     return line;
 }
 
-char *limpiar(char cadena[])
+char *limpiar(char line[])
 {
-    cadena = "";
-    return cadena;
+    line = "";
+    return line;
 }
