@@ -61,6 +61,7 @@ void str_echo  (FILE *fp, int sock)
             exit(5);
         }
         fputs(recvline, stdout);
+        printf(" ");
     }
     
 }
